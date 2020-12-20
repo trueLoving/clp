@@ -1,11 +1,39 @@
-name: GitHub Actions Build and Deploy Demo
-on:
-  push:
-    branches:
-      - master
+name: CICD
+
+# spell-checker:ignore CICD CODECOV MSVC MacOS Peltoche SHAs buildable clippy dpkg esac fakeroot gnueabihf halium libssl mkdir musl popd printf pushd rustfmt softprops toolchain
+
+env:
+  PROJECT_NAME: clp
+  PROJECT_DESC: "An Command show local installed packages"
+  RUST_MIN_SRV: "1.43.1"
+
+on: [push, pull_request]
+
 jobs:
-  build-and-deploy:
-    runs-on: ubuntu-latest
+  style:
+    name: Style
+    runs-on: ${{ matrix.job.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        job: [ { os: ubuntu-latest }, { os: macos-latest }, { os: windows-latest } ]
     steps:
-    - name: Checkout
-      uses: actions/checkout@master
+    - uses: action/checkout@master
+    - name: Install `rust` toolchain
+      uses: action-rs/toolchain@v1
+      with:
+        toolchain: ${{env.RUST_MIN_SRV}}
+        override: true
+        profile: minimal
+        components: rustfmt, clippy
+    - name: "`fmt` testing"
+      uses: action-rs/cargo@v1
+      with:
+        command: fmt
+        args: --all -- --check
+    - name: "`clippy` testing"
+      if: success() || failure()
+      uses: action-rs/cargo@v1
+      with:
+        command: clippy
+        args: -- -D warning
