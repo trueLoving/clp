@@ -1,0 +1,18 @@
+[package]
+name = "clp_show"
+version = "0.1.0"
+authors = ["star sky <1176789241@qq.com>"]
+edition = "2018"
+description = "An command show local installed package also called 'clp'" 
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[build-dependencies]
+clap = "2.33.*" 
+
+[dependencies]
+wild = "2.0.*"
+
+[dependencies.clap]
+features = ["suggestions", "color", "wrap_help"]
+version = "2.33.*"

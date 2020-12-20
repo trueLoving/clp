@@ -1,0 +1,1 @@
+a practice for rust
