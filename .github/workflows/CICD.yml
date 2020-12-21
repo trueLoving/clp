@@ -18,22 +18,22 @@ jobs:
       matrix:
         job: [ { os: ubuntu-latest }, { os: macos-latest }, { os: windows-latest } ]
     steps:
-    - uses: action/checkout@master
+    - uses: actions/checkout@master
     - name: Install `rust` toolchain
-      uses: action-rs/toolchain@v1
+      uses: actions-rs/toolchain@v1
       with:
         toolchain: ${{env.RUST_MIN_SRV}}
         override: true
         profile: minimal
         components: rustfmt, clippy
     - name: "`fmt` testing"
-      uses: action-rs/cargo@v1
+      uses: actions-rs/cargo@v1
       with:
         command: fmt
         args: --all -- --check
     - name: "`clippy` testing"
       if: success() || failure()
-      uses: action-rs/cargo@v1
+      uses: actions-rs/cargo@v1
       with:
         command: clippy
         args: -- -D warning
